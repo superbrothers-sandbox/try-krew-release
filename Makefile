@@ -1,6 +1,6 @@
 GO ?= GO111MODULE=on GOPROXY=https://gocenter.io go
 DIST_DIR := dist
-GIT_VERSION ?= $(shell git describe --tags --dirty --always)
+GIT_VERSION ?= $(shell ./hack/git-version.sh)
 
 .PHONY: build
 build:
