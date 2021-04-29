@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
-  pull_request:
-    types: [opened, synchronize]
+    tags: [v*]
 
 jobs:
   run:
@@ -20,18 +18,14 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
-    - name: Ensure go.mod is already tidied
-      run: go mod tidy && git diff -s --exit-code go.sum
-    - run: make vet fmt lint
     - run: make dist
-    - uses: superbrothers/actions/krew-plugin-test@master
-      with:
-        archive: ./dist/kubectl-open_svc-linux-amd64.zip
-        manifest: ./dist/open-svc.yaml
-        command: kubectl open-svc --help
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./dist/!(config.yaml)
+        files: dist/!(config.yaml)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: superbrothers/actions/krew-plugin-test@master
+      with:
+        manifest: ./dist/open-svc.yaml
+        command: kubectl open-svc --help
