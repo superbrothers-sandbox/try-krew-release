@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   push:
@@ -34,10 +34,8 @@ jobs:
     - uses: superbrothers/actions/krew-plugin-release@krew-plugin-release
       with:
         token: ${{ secrets.PAT }}
-        manifest: dist/open-svc.yaml
-        plugin: open-svc
+        plugin_name: open-svc
+        manifest_path: dist/open-svc.yaml
         git_author_name: superbrothers-robot
         git_author_email: superbrothers-robot@users.noreply.github.com
         krew_index_repo: superbrothers/krew-index
-      env:
-        VERSION: ${{ steps.get_version.outputs.VERSION }}
