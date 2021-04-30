@@ -34,9 +34,10 @@ jobs:
     - uses: superbrothers/actions/krew-plugin-release@krew-plugin-release
       with:
         token: ${{ secrets.PAT }}
-        git_author: superbrothers-robot <superbrothers-robot@users.noreply.github.com>
         manifest: dist/open-svc.yaml
         plugin: open-svc
+        git_author_name: superbrothers-robot
+        git_author_email: superbrothers-robot@users.noreply.github.com
         krew_index_repo: superbrothers/krew-index
       env:
         VERSION: ${{ steps.get_version.outputs.VERSION }}
