@@ -28,25 +28,21 @@ jobs:
       with:
         manifest: ./dist/open-svc.yaml
         command: kubectl open-svc --help
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
     - uses: actions/checkout@v2
       with:
         repository: superbrothers/krew-index
         path: krew-index
         fetch-depth: 0
-    - run: |
-        cp dist/open-svc.yaml krew-index/plugins
-        cd krew-index
-        git config user.name "$GIT_USERNAME"
-        git config user.email "$GIT_EMAIL"
-        git --no-pager diff
-        [[ -z "$KREW_PLUGIN_VERSION" ]] && KREW_PLUGIN_VERSION="${GITHUB_REF##*/}"
-        git commit -am "Bump the version of $KREW_PLUGIN_NAME to $KREW_PLUGIN_VERSION"
-      env:
-        GIT_USERNAME: Kazuki Suda
-        GIT_EMAIL: 230185+superbrothers@users.noreply.github.com
-        KREW_PLUGIN_NAME: open-svc
+    - run: cp dist/open-svc.yaml krew-index/plugins
     - uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.PAT }}
         path: krew-index
         push-to-fork: superbrothers-sandbox/krew-index
+        commit-message: Bump the version of open-svc to ${{ steps.get_version.outputs.VERSION }}
+        title: Bump the version of open-svc to ${{ steps.get_version.outputs.VERSION }}
+        body: This PR bumps the version of open-svc to ${{ steps.get_version.outputs.VERSION }}.
+        branch: open-svc-${{ steps.get_version.outputs.VERSION }}
