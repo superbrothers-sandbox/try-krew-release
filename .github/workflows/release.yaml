@@ -39,4 +39,4 @@ jobs:
         plugin: open-svc
         krew_index_repo: superbrothers/krew-index
       env:
-        VERSION: ${{ get_version.outputs.VERSION }}
+        VERSION: ${{ steps.get_version.outputs.VERSION }}
