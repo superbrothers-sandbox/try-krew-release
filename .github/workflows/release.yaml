@@ -38,6 +38,6 @@ jobs:
         plugin: open-svc
         git_author_name: superbrothers-robot
         git_author_email: superbrothers-robot@users.noreply.github.com
-        krew_index_repo: superbrothers/krew-index
+        krew_index_repo: github.com/superbrothers/krew-index
       env:
         VERSION: ${{ steps.get_version.outputs.VERSION }}
