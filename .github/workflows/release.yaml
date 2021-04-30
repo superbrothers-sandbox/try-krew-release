@@ -31,18 +31,12 @@ jobs:
     - name: Get the version
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
-    - uses: actions/checkout@v2
-      with:
-        repository: superbrothers/krew-index
-        path: krew-index
-        fetch-depth: 0
-    - run: cp dist/open-svc.yaml krew-index/plugins
-    - uses: peter-evans/create-pull-request@v3
+    - uses: superbrothers/actions/krew-plugin-release@krew-plugin-release
       with:
         token: ${{ secrets.PAT }}
-        path: krew-index
-        push-to-fork: superbrothers-sandbox/krew-index
-        commit-message: Bump the version of open-svc to ${{ steps.get_version.outputs.VERSION }}
-        title: Bump the version of open-svc to ${{ steps.get_version.outputs.VERSION }}
-        body: This PR bumps the version of open-svc to ${{ steps.get_version.outputs.VERSION }}.
-        branch: open-svc-${{ steps.get_version.outputs.VERSION }}
+        git_author: superbrothers-robot <superbrothers-robot@users.noreply.github.com>
+        manifest: dist/open-svc.yaml
+        plugin: open-svc
+        krew_index_repo: superbrothers/krew-index
+      env:
+        VERSION: ${{ get_version.outputs.VERSION }}
